@@ -1,7 +1,7 @@
 /*Extra small*/
 @media only screen and (max-width: 600px) {
   .modal-body {
-    width: 70%;
+    width: 80%;
     text-align: center;
     background-color: aliceblue;
     border-radius: 1rem;
@@ -28,7 +28,7 @@
 /*Large*/
 @media only screen and (min-width: 992px) {
   .modal-body {
-    width: 30%;
+    width: 40%;
     text-align: center;
     background-color: aliceblue;
     border-radius: 1rem;
@@ -75,10 +75,26 @@
   opacity: 0;
 }
 
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
 .modal-transition-in {
   transition-duration: 0.5s;
   scale: 1;
   opacity: 1;
+}
+
+.neighbour {
+  width: 100%;
+}
+
+.neighbour img {
+  width: 50%;
+  border-radius: 0.3rem;
+  box-shadow: 0 5px 15px 5px rgba(0, 0, 0, 0.432);
 }
 
 .modal-transition-out {

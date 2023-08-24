@@ -65,11 +65,45 @@ const insertModalWithAnimation = function (html) {
 //REMOVE MODAL FUNCTION
 const removeModalWithAnimation = function () {
   document.querySelector(`.modal`).addEventListener(`click`, function (e) {
-    if (!e.target.closest(`.modal-body`))
+    if (!e.target.closest(`.modal-body`)) {
       setTimeout(function () {
         document.querySelector(`.modal`).remove();
       }, 200);
-    document.querySelector(`.modal-body`).classList.add(`modal-transition-out`);
+      document
+        .querySelector(`.modal-body`)
+        .classList.add(`modal-transition-out`);
+    }
+  });
+};
+
+const getNeighbours = function (data) {
+  return data.borders;
+};
+
+const addNeighbourHTML = function (data) {
+  const html = `
+  <div class = "neighbour">
+    <img src ="${data.flags.png}" class = "img-fluid">
+    <p>${data.name.common}</p>
+  </div>
+  `;
+  document.querySelector(`.modal-footer`).insertAdjacentHTML(`beforeend`, html);
+};
+
+const getNeighbourData = function (code) {
+  fetch(`
+  https://restcountries.com/v3.1/alpha/${code}`)
+    .then((response) => response.json())
+    .then((data) => {
+      addNeighbourHTML(data[0]);
+    });
+};
+
+const renderNeighbours = function (data) {
+  const neighbours = getNeighbours(data).filter((_, index) => index < 4);
+  let html = "";
+  neighbours.forEach((neighbour) => {
+    html += getNeighbourData(neighbour);
   });
 };
 
@@ -92,12 +126,18 @@ const createModal = function (data) {
         } ${data.population >= 1000000 ? "millions" : ""}</h3>
         <h3>💸 Currency: ${Object.values(data.currencies)[0].name}</h3>
       </div>
+      <h1>Neighbours:</h1>
+      <div class = "modal-footer">
+      </div>
     </div>
   </div>
   `;
 
+  renderNeighbours(data);
+
   //insert the document and add animation
   insertModalWithAnimation(html);
+  //insertNeighbours();
 
   //add animation and remove document.
   removeModalWithAnimation();
