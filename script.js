@@ -49,12 +49,31 @@ let positronLabels = L.tileLayer(
 //overlay layer - geojson
 let geojson = L.geoJson(countries).addTo(map);
 
-//zoom to country function
+//ZOOM TO COUNTRY FUNCTION
 const zoomToCountry = function (data) {
   map.setView(data.latlng, 6);
 };
 
-//create modal function
+//INSERT MODAL FUNCTION
+const insertModalWithAnimation = function (html) {
+  document.getElementById(`map`).insertAdjacentHTML("beforebegin", html);
+  setTimeout(function () {
+    document.querySelector(`.modal-body`).classList.add(`modal-transition-in`);
+  }, 100);
+};
+
+//REMOVE MODAL FUNCTION
+const removeModalWithAnimation = function () {
+  document.querySelector(`.modal`).addEventListener(`click`, function (e) {
+    if (!e.target.closest(`.modal-body`))
+      setTimeout(function () {
+        document.querySelector(`.modal`).remove();
+      }, 200);
+    document.querySelector(`.modal-body`).classList.add(`modal-transition-out`);
+  });
+};
+
+//CREATE MODAL FUNCTION
 const createModal = function (data) {
   //html part
   const html = `
@@ -70,7 +89,7 @@ const createModal = function (data) {
           data.population >= 1000000
             ? (data.population / 1000000).toFixed(1)
             : data.population
-        }</h3>
+        } ${data.population >= 1000000 ? "millions" : ""}</h3>
         <h3>💸 Currency: ${Object.values(data.currencies)[0].name}</h3>
       </div>
     </div>
@@ -78,19 +97,10 @@ const createModal = function (data) {
   `;
 
   //insert the document and add animation
-  document.getElementById(`map`).insertAdjacentHTML("beforebegin", html);
-  setTimeout(function () {
-    document.querySelector(`.modal-body`).classList.add(`modal-transition-in`);
-  }, 100);
+  insertModalWithAnimation(html);
 
   //add animation and remove document.
-  document.querySelector(`.modal`).addEventListener(`click`, function (e) {
-    if (!e.target.closest(`.modal-body`))
-      setTimeout(function () {
-        document.querySelector(`.modal`).remove();
-      }, 200);
-    document.querySelector(`.modal-body`).classList.add(`modal-transition-out`);
-  });
+  removeModalWithAnimation();
 };
 
 //api call for country data
@@ -103,9 +113,18 @@ const getCountryData = function (country) {
     });
 };
 
-geojson.eachLayer((layer) => {
-  layer.on(`click`, (e) => {
-    const name = e.target.feature.properties.name;
-    getCountryData(name);
+const countrySelect = function () {
+  geojson.eachLayer((layer) => {
+    layer.on(`click`, (e) => {
+      let name = e.target.feature.properties.name;
+
+      //United kingdom bug
+      if (name === "Wales" || name === "England" || name === "Scotland")
+        name = "United Kingdom";
+
+      getCountryData(name);
+    });
   });
-});
+};
+
+countrySelect();
