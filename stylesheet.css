@@ -1,0 +1,111 @@
+/*Extra small*/
+@media only screen and (max-width: 600px) {
+  .modal-body {
+    width: 70%;
+    text-align: center;
+    background-color: aliceblue;
+    border-radius: 1rem;
+  }
+}
+/*Small*/
+@media only screen and (min-width: 600px) {
+  .modal-body {
+    width: 60%;
+    text-align: center;
+    background-color: aliceblue;
+    border-radius: 1rem;
+  }
+}
+/*Medium*/
+@media only screen and (min-width: 768px) {
+  .modal-body {
+    width: 50%;
+    text-align: center;
+    background-color: aliceblue;
+    border-radius: 1rem;
+  }
+}
+/*Large*/
+@media only screen and (min-width: 992px) {
+  .modal-body {
+    width: 30%;
+    text-align: center;
+    background-color: aliceblue;
+    border-radius: 1rem;
+  }
+}
+/*Extra large*/
+@media only screen and (min-width: 1200px) {
+  .modal-body {
+    width: 25%;
+    text-align: center;
+    background-color: aliceblue;
+    border-radius: 1rem;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+#map {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.336);
+  width: 100%;
+  height: 100vh;
+}
+
+.modal-body {
+  scale: 0;
+  opacity: 0;
+}
+
+.modal-transition-in {
+  transition-duration: 0.5s;
+  scale: 1;
+  opacity: 1;
+}
+
+.modal-transition-out {
+  transition-duration: 0.2s;
+  scale: 0;
+  opacity: 0;
+}
+
+.modal-text {
+  padding: 1rem;
+}
+
+.modal-text h3,
+h1 {
+  padding-bottom: 1rem;
+}
+
+.modal-text h1 {
+  font-size: 1.5rem;
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+
+.hidden {
+  display: none;
+}
