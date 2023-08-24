@@ -76,8 +76,10 @@ const removeModalWithAnimation = function () {
   });
 };
 
+//return the borders -> the neighbours
 const getNeighbours = function (data) {
-  return data.borders;
+  if (data.hasOwnProperty(`borders`)) return data.borders;
+  else return false;
 };
 
 const addNeighbourHTML = function (data) {
@@ -100,6 +102,8 @@ const getNeighbourData = function (code) {
 };
 
 const renderNeighbours = function (data) {
+  if (!getNeighbours(data)) return;
+
   const neighbours = getNeighbours(data).filter((_, index) => index < 4);
   let html = "";
   neighbours.forEach((neighbour) => {
@@ -109,6 +113,8 @@ const renderNeighbours = function (data) {
 
 //CREATE MODAL FUNCTION
 const createModal = function (data) {
+  console.log(data);
+  console.log(!data.languages);
   //html part
   const html = `
   <div class="modal center">
@@ -118,15 +124,21 @@ const createModal = function (data) {
       </div>
       <div class="modal-text">
         <h1>${data.name.common}</h1>
-        <h3>🗣️ Language: ${Object.values(data.languages)[0]}</h3>
+        <h3>🗣️ Language: ${
+          !data.languages ? "English" : `${Object.values(data.languages)[0]}`
+        }</h3>
         <h3>👶🏻 Population: ${
           data.population >= 1000000
             ? (data.population / 1000000).toFixed(1)
             : data.population
-        } ${data.population >= 1000000 ? "millions" : ""}</h3>
-        <h3>💸 Currency: ${Object.values(data.currencies)[0].name}</h3>
+        } ${data.population >= 1000000 ? "million" : ""}</h3>
+        <h3>💸 Currency: ${
+          !data.currencies
+            ? "No currency"
+            : `${Object.values(data.currencies)[0].name}`
+        }</h3>
       </div>
-      <h1>Neighbours:</h1>
+
       <div class = "modal-footer">
       </div>
     </div>
