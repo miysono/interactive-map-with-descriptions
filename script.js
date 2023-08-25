@@ -20,15 +20,12 @@ map.setMaxBounds([
 //set map max/min zoom
 map.setMinZoom(minZoom);
 map.setMaxZoom(maxZoom);
-
 //set the view of the map
 map.setView([40, 0], minZoom);
-
 //create panels
 map.createPane("labels");
 map.getPane("labels").style.zIndex = 650;
 map.getPane("labels").style.pointerEvents = "none";
-
 //first layer - tiles
 let positron = L.tileLayer(
   "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
@@ -92,15 +89,6 @@ const addNeighbourHTML = function (data) {
   document.querySelector(`.modal-footer`).insertAdjacentHTML(`beforeend`, html);
 };
 
-const getNeighbourData = function (code) {
-  fetch(`
-  https://restcountries.com/v3.1/alpha/${code}`)
-    .then((response) => response.json())
-    .then((data) => {
-      addNeighbourHTML(data[0]);
-    });
-};
-
 const renderNeighbours = function (data) {
   if (!getNeighbours(data)) return;
 
@@ -156,14 +144,6 @@ const createModal = function (data) {
 };
 
 //api call for country data
-const getCountryData = function (country) {
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then((response) => response.json())
-    .then((data) => {
-      createModal(data[0]);
-      zoomToCountry(data[0]);
-    });
-};
 
 const countrySelect = function () {
   geojson.eachLayer((layer) => {
@@ -180,3 +160,23 @@ const countrySelect = function () {
 };
 
 countrySelect();
+
+const getCountryData = async function (country) {
+  try {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${country}`
+    );
+    const data = await response.json();
+    createModal(data[0]);
+    zoomToCountry(data[0]);
+  } catch (err) {
+    throw err;
+  }
+};
+const getNeighbourData = async function (neighbourCode) {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/alpha/${neighbourCode}`
+  );
+  const data = await response.json();
+  addNeighbourHTML(data[0]);
+};
